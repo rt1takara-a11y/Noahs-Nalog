@@ -143,9 +143,66 @@
   .reveal.in { opacity:1; transform:none; }
   @media (prefers-reduced-motion:reduce){ .reveal { opacity:1; transform:none; transition:none; } html { scroll-behavior:auto; } }
   :focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+
+  /* INTRO */
+  body.intro-active { overflow:hidden; }
+  #intro { position:fixed; inset:0; z-index:999; display:flex; align-items:center; justify-content:center; background:var(--paper); cursor:pointer; transition:opacity .6s ease; }
+  #intro.intro-out { opacity:0; pointer-events:none; }
+  #intro svg { width:min(46vw,260px); height:auto; overflow:visible; }
+  #intro .wave { fill:none; stroke:var(--line); stroke-width:1.6; stroke-linecap:round; opacity:0; animation:intro-wave-in .5s ease forwards; }
+  #intro .wave.w2 { animation-delay:.12s; }
+  #intro .wave.w3 { animation-delay:.24s; }
+  #intro .ark-path {
+    fill:var(--accent); fill-opacity:0; stroke:var(--accent); stroke-width:2.2; stroke-linejoin:round; stroke-linecap:round;
+    stroke-dasharray:1; stroke-dashoffset:1;
+    animation:intro-ark-draw .9s ease forwards, intro-ark-fill .4s ease forwards .85s;
+  }
+  #intro .ark-group { animation:intro-ark-sail .9s ease-in forwards 1.3s; }
+  #intro .intro-skip {
+    position:absolute; bottom:clamp(24px,6vh,56px); left:0; right:0; text-align:center;
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; color:var(--ink-faint);
+    opacity:0; animation:intro-wave-in .5s ease forwards .5s;
+  }
+  @keyframes intro-ark-draw { to { stroke-dashoffset:0; } }
+  @keyframes intro-ark-fill { to { fill-opacity:1; } }
+  @keyframes intro-wave-in { to { opacity:1; } }
+  @keyframes intro-ark-sail { to { transform:translateX(48vw); opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ #intro { display:none; } }
 </style>
 </head>
 <body id="top">
+
+<div id="intro" aria-hidden="true">
+  <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+    <path class="wave w1" pathLength="1" d="M0,138 C25,123 50,153 75,138 C100,123 125,153 150,138 C175,123 200,153 225,138 C250,123 275,153 300,138"/>
+    <path class="wave w2" pathLength="1" d="M0,150 C25,138 50,162 75,150 C100,138 125,162 150,150 C175,138 200,162 225,150 C250,138 275,162 300,150"/>
+    <path class="wave w3" pathLength="1" d="M0,160 C25,150 50,170 75,160 C100,150 125,170 150,160 C175,150 200,170 225,160 C250,150 275,170 300,160"/>
+    <g class="ark-group">
+      <path class="ark-path" pathLength="1" d="M35,105 Q55,132 150,132 Q245,132 265,105 L245,93 Q205,110 150,110 Q95,110 55,93 Z"/>
+      <path class="ark-path" pathLength="1" d="M119,93 L119,62 Q119,58 123,58 L177,58 Q181,58 181,62 L181,93 Z"/>
+      <path class="ark-path" pathLength="1" d="M112,58 L150,30 L188,58 Z"/>
+    </g>
+  </svg>
+  <div class="intro-skip">クリックでスキップ</div>
+</div>
+<script>
+  (function () {
+    var intro = document.getElementById('intro');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = sessionStorage.getItem('nn_intro_seen');
+    if (reduce || seen) { intro.remove(); return; }
+    sessionStorage.setItem('nn_intro_seen', '1');
+    document.body.classList.add('intro-active');
+    function finish() {
+      if (intro.classList.contains('intro-out')) return;
+      intro.classList.add('intro-out');
+      document.body.classList.remove('intro-active');
+      intro.addEventListener('transitionend', function () { intro.remove(); }, { once: true });
+    }
+    intro.addEventListener('click', finish);
+    setTimeout(finish, 2600);
+  })();
+</script>
 
 <header class="site">
   <div class="wrap nav">
