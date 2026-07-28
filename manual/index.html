@@ -126,7 +126,9 @@
     transition: border-color .15s ease, color .15s ease;
   }
   .theme-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
-  @media (max-width: 820px) { .nav-links { display: none; } }
+  .home-link { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-faint); letter-spacing: .02em; }
+  .home-link:hover { color: var(--ink); }
+  @media (max-width: 820px) { .nav-links { display: none; } .home-link, .nav-right .btn-primary { display: none; } }
 
   /* ---- Hero ---- */
   .hero { padding: clamp(56px, 9vw, 104px) 0 clamp(48px, 6vw, 80px); position: relative; }
@@ -287,7 +289,7 @@
       <a href="#categories">収録範囲</a>
     </nav>
     <div class="nav-right">
-      <a href="../" style="font-family:var(--font-mono);font-size:12.5px;color:var(--ink-faint);letter-spacing:.02em;">← Noah's Nalog</a>
+      <a class="home-link" href="../">← Noah's Nalog</a>
       <button class="theme-btn" id="themeToggle" type="button" aria-label="表示テーマを切り替える">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
